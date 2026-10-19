@@ -1,0 +1,18 @@
+{
+  "n_videos": 902,
+  "by_split": {
+    "train": 630,
+    "test": 136,
+    "val": 136
+  },
+  "n_fake_videos_with_source": 451,
+  "n_sources_by_split": {
+    "train": 617,
+    "test": 135,
+    "val": 136
+  },
+  "sources_shared_across_splits": 0,
+  "shared_examples": {},
+  "problems": {},
+  "lavdf_global_fakes_with_original_in_other_split": 0
+}

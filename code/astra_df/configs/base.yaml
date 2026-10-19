@@ -1,0 +1,90 @@
+# ============================================================
+# ASTRA-DF base configuration
+# ============================================================
+# Shared defaults. Variant-specific configs (transformer.yaml,
+# bilstm.yaml) override only the `model.backbone` block.
+# ============================================================
+
+experiment:
+  name: astra_df_base
+  seed: 42
+  output_dir: runs/
+
+data:
+  # Preprocessing contract (do not change without re-preprocessing)
+  target_fps: 30
+  audio_sr: 16000
+  clip_duration_sec: 1.0
+  mouth_size: 96
+  n_mfcc: 13
+  hop_length: 200
+  n_fft: 512
+
+  # Dataset
+  dataset: lavdf
+  root: /path/to/lav_df
+  processed_root: processed_lavdf/
+  metadata_csv: processed_lavdf/metadata.csv
+
+  # Loader
+  batch_size: 32
+  num_workers: 4
+  pin_memory: true
+
+  # Augmentation
+  augment:
+    enabled: true
+    horizontal_flip_p: 0.5
+    color_jitter_p: 0.3
+    gaussian_noise_p: 0.2
+    audio_noise_db: 30.0
+    compression_p: 0.2
+
+model:
+  d_model: 256
+  visual_encoder:
+    backbone: mobilenet_v3_small
+    pretrained: true
+    out_dim: 256
+  audio_encoder:
+    in_channels: 13
+    hidden_channels: 128
+    out_dim: 256
+    num_layers: 3
+  backbone:
+    # Overridden per-variant
+    type: transformer
+  cross_modal:
+    n_heads: 4
+    dropout: 0.1
+  heads:
+    classification:
+      hidden_dim: 128
+      dropout: 0.3
+    sync:
+      hidden_dim: 64
+    localization:
+      hidden_dim: 64
+
+loss:
+  # Multi-task weights: total = alpha * L_cls + beta * L_sync + gamma * L_loc
+  alpha: 1.0
+  beta: 0.5
+  gamma: 0.25
+  label_smoothing: 0.05
+
+optim:
+  optimizer: adamw
+  lr: 1.0e-4
+  weight_decay: 1.0e-4
+  betas: [0.9, 0.999]
+  scheduler: cosine
+  warmup_epochs: 2
+  epochs: 30
+  grad_clip: 1.0
+  amp: true   # automatic mixed precision
+
+eval:
+  metrics: [accuracy, precision, recall, f1, auc]
+  localization_iou: [0.5, 0.75, 0.95]
+  log_every: 50

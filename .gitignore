@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.DS_Store
+.venv*/
+# data, caches and checkpoints are not distributed in the repository
+assets/
+*_cache/
+checkpoints/
+*.pt
+*.pth
+*.bin
+*.npz

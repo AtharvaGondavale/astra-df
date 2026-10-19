@@ -1,0 +1,15 @@
+# ASTRA-DF / Transformer variant (primary model)
+# Inherits from base.yaml; only overrides model.backbone.
+
+experiment:
+  name: astra_df_transformer
+  output_dir: runs/transformer/
+
+model:
+  backbone:
+    type: transformer
+    n_layers: 4
+    n_heads: 4
+    ffn_dim: 512
+    dropout: 0.1
+    positional: learned

@@ -1,0 +1,9 @@
+# Cache building only (prepare_*.py, measure_roi.py, analyse_lavdf_audio.py), Python <= 3.12.
+# mediapipe's legacy `solutions` API was removed after 0.10.x; keep this pin.
+mediapipe==0.10.13
+opencv-python-headless==5.0.0.93
+numpy==2.5.3
+pandas==3.0.6
+librosa==1.0.0
+soundfile==0.14.0
+imageio-ffmpeg==0.6.0   # provides a static ffmpeg binary if none is on PATH

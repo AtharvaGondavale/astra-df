@@ -1,0 +1,12 @@
+# ASTRA-DF / BiLSTM variant (ablation baseline)
+
+experiment:
+  name: astra_df_bilstm
+  output_dir: runs/bilstm/
+
+model:
+  backbone:
+    type: bilstm
+    hidden_dim: 128
+    n_layers: 2
+    dropout: 0.2

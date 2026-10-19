@@ -1,0 +1,109 @@
+{
+  "hardware": {
+    "os": "macOS-14.5-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "python": "3.13.7",
+    "torch": "2.14.1",
+    "torch_threads_default": 4,
+    "cpu": "Apple M3",
+    "cpu_cores_physical": "8",
+    "cpu_cores_performance": "4",
+    "ram_gb": 8.0,
+    "model": "Mac15,3",
+    "gpu": "Apple M3 integrated GPU (MPS)"
+  },
+  "protocol": {
+    "input": "batch 1, video 30x3x96x96, MFCC 81x13 (one 1-s clip)",
+    "cpu": "torch.set_num_threads(1); 10 warm-up + 30 timed iterations",
+    "accelerator": "10 warm-up + 50 timed iterations, explicit device synchronisation",
+    "repeats": 3,
+    "statistic": "median over repeats"
+  },
+  "variants": {
+    "transformer": {
+      "params": 7111653,
+      "flops": 860422656,
+      "cpu_ms_1thread": 208.64,
+      "cpu_ms_all": [
+        206.48,
+        208.64,
+        210.36
+      ],
+      "accel_device": "mps",
+      "accel_ms": 12.03,
+      "accel_ms_all": [
+        12.01,
+        12.03,
+        12.06
+      ]
+    },
+    "bilstm": {
+      "params": 4542949,
+      "flops": 1049559552,
+      "cpu_ms_1thread": 211.03,
+      "cpu_ms_all": [
+        210.92,
+        211.03,
+        216.11
+      ],
+      "accel_device": "mps",
+      "accel_ms": 13.86,
+      "accel_ms_all": [
+        13.82,
+        13.86,
+        13.9
+      ]
+    },
+    "audio-only": {
+      "params": 2840005,
+      "flops": 102754560,
+      "cpu_ms_1thread": 1.97,
+      "cpu_ms_all": [
+        1.87,
+        1.97,
+        2.02
+      ],
+      "accel_device": "mps",
+      "accel_ms": 1.16,
+      "accel_ms_all": [
+        1.15,
+        1.16,
+        1.17
+      ]
+    },
+    "visual-only": {
+      "params": 3284197,
+      "flops": 637385472,
+      "cpu_ms_1thread": 206.26,
+      "cpu_ms_all": [
+        206.09,
+        206.26,
+        206.39
+      ],
+      "accel_device": "mps",
+      "accel_ms": 10.67,
+      "accel_ms_all": [
+        10.64,
+        10.67,
+        10.69
+      ]
+    },
+    "fusion-concat": {
+      "params": 6056421,
+      "flops": 739054080,
+      "cpu_ms_1thread": 210.96,
+      "cpu_ms_all": [
+        203.41,
+        210.96,
+        213.62
+      ],
+      "accel_device": "mps",
+      "accel_ms": 11.2,
+      "accel_ms_all": [
+        11.19,
+        11.2,
+        11.21
+      ]
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "target_roi": 96,
+  "bbox_pad": 0.35,
+  "LAV-DF": {
+    "n_videos": 60,
+    "source_resolutions": [
+      "224x224"
+    ],
+    "lip_box_w_median_px": 39.642229080200195,
+    "lip_box_h_median_px": 12.803156852722168,
+    "crop_side_median_px": 67.39178943634033,
+    "crop_side_p10_px": 54.61055304527282,
+    "crop_side_p90_px": 78.39699585914612,
+    "frac_upsampled_at_96": 1.0,
+    "frac_upsampled_at_128": 1.0
+  },
+  "FakeAVCeleb/RealVideo-RealAudio": {
+    "n_videos": 40,
+    "source_resolutions": [
+      "224x224"
+    ],
+    "lip_box_w_median_px": 41.092989921569824,
+    "lip_box_h_median_px": 14.124281883239746,
+    "crop_side_median_px": 69.8580828666687,
+    "crop_side_p10_px": 59.02475173950195,
+    "crop_side_p90_px": 82.83379667282104,
+    "frac_upsampled_at_96": 0.975,
+    "frac_upsampled_at_128": 1.0
+  },
+  "FakeAVCeleb/FakeVideo-RealAudio": {
+    "n_videos": 40,
+    "source_resolutions": [
+      "224x224"
+    ],
+    "lip_box_w_median_px": 42.256431102752686,
+    "lip_box_h_median_px": 14.889913558959961,
+    "crop_side_median_px": 71.83593287467957,
+    "crop_side_p10_px": 65.71606516838074,
+    "crop_side_p90_px": 83.30240252494812,
+    "frac_upsampled_at_96": 0.975,
+    "frac_upsampled_at_128": 1.0
+  }
+}
