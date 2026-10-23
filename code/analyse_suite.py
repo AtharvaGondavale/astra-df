@@ -413,6 +413,10 @@ def main() -> None:
         M["lr.full-vs-audio.f1.diff"] = f"{d.mean():+.3f}"
         M["lr.full-vs-audio.f1.ci"] = f"[{d.mean() - tcrit * se:+.3f}, {d.mean() + tcrit * se:+.3f}]"
         M["lr.full-vs-audio.f1.p"] = f"{stats.ttest_rel(l_, a_).pvalue:.2f}"
+        dn = -d   # audio-only minus full: the sign convention of the five-seed comparison
+        M["lr.audio-vs-full.f1.diff"] = f"{dn.mean():+.3f}"
+        M["lr.audio-vs-full.f1.ci"] = f"[{dn.mean() - tcrit * se:+.3f}, {dn.mean() + tcrit * se:+.3f}]"
+        M["lr.audio-vs-full.f1.p"] = M["lr.full-vs-audio.f1.p"]
         M["lr.audio-same-seeds.f1"] = ms(a_)
 
     # ---- training platform, from the run records themselves

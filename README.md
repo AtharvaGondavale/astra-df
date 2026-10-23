@@ -25,6 +25,7 @@ This repository contains everything needed to reproduce every number in the revi
 ```
 code/
   astra_df/                  model building blocks (encoders, temporal backbones, cross-modal bridge, heads)
+  verify_setup.py            environment and model smoke check
   run_experiments.py         dataset (PackedLAVDF), model variants (VariantASTRA), training stages
   eval_suite.py              evaluation only: counterfactuals, zero-shot corpora, attention statistics
   analyse_suite.py           turns raw per-clip outputs into all reported statistics (LaTeX macros)
@@ -34,18 +35,22 @@ code/
   check_splits.py            source-video independence of the train/val/test partitions
   analyse_lavdf_audio.py     audio re-timing in LAV-DF "video-only" fakes
   bench_latency.py           latency with recorded hardware
-  make_attention_figure.py   real attention maps (Fig. 2)
+  make_attention_figure.py   real attention maps (Fig. 3)
+  make_counterfactual_figure.py   test-time input changes (Fig. 2)
   make_pipeline_figure.py    pipeline diagram (Fig. 1)
   measure_roi.py             native mouth-region size
+  measure_mouth_band.py      height of the mouth band inside the letterboxed crops
   run_revision.sh            full training + evaluation queue (all variants, all seeds)
   run_randctrl.sh            random-initialisation capacity control for the lipreading encoder
 results/
   revision/                  results of the revised paper
     results_rev.json         training records: config, metrics, per-clip test scores, every run
     eval_suite.json          per-clip scores and attention statistics for every evaluation
-    *.json                   split check, latency, LAV-DF audio check, ROI sizes, summary
+    *.json                   split check, latency, LAV-DF audio check, ROI sizes, mouth-band height, summary
   submitted_version/         results of the originally submitted manuscript, for reference
 ```
+
+Training writes to `results/rev/`; `results/revision/` holds the outputs used in the paper.
 
 ## Setup
 
@@ -98,7 +103,7 @@ Download them into `results/rev/checkpoints/` (the path `run_revision.sh` writes
 ```bash
 cd code
 # 1. build caches (prep environment)
-PATH="../.venv-prep/bin:$PATH" ../.venv-prep/bin/python prepare_subset.py --root /path/to/LAV-DF --out ../assets/astra_cache --n-videos 900
+PATH="../.venv-prep/bin:$PATH" ../.venv-prep/bin/python prepare_subset.py --root /path/to/LAV-DF --out ../assets/astra_cache --n-videos 900   # rounding per category gives the 902 videos used
 PATH="../.venv-prep/bin:$PATH" ../.venv-prep/bin/python prepare_fakeavceleb.py --root /path/to/FakeAVCeleb_v1.2 --out ../assets/favc_cache
 PATH="../.venv-prep/bin:$PATH" ../.venv-prep/bin/python prepare_timit.py --deepfake-timit /path/to/DeepfakeTIMIT \
     --vidtimit /path/to/VidTIMIT --out ../assets/timit_cache --shared-audio
@@ -111,6 +116,7 @@ nohup ./run_revision.sh > ../results/rev/queue.log 2>&1 &
 ../.venv/bin/python check_splits.py --metadata ../assets/lavdf_metadata.json --cache ../assets/astra_cache
 PATH="../.venv-prep/bin:$PATH" ../.venv/bin/python analyse_lavdf_audio.py --lavdf-root /path/to/LAV-DF --cache ../assets/astra_cache
 ../.venv/bin/python analyse_suite.py --lavdf ../assets/astra_cache --favc ../assets/favc_cache --dftimit ../assets/timit_cache
+../.venv/bin/python measure_mouth_band.py ../assets/astra_cache ../assets/favc_cache --out ../results/rev/mouth_band.json
 ```
 
 `analyse_suite.py` writes every reported number as a LaTeX macro and asserts that the per-clip labels it reconstructs match the stored ones before computing anything.
@@ -127,12 +133,17 @@ cd code
     --lavdf-audio ../results/revision/lavdf_audio_check.json \
     --out-tex ../results/results_suite.tex --out-json ../results/suite_summary.json \
     --lavdf ../assets/astra_cache --favc ../assets/favc_cache --dftimit ../assets/timit_cache
+../.venv/bin/python make_counterfactual_figure.py --suite ../results/revision/eval_suite.json \
+    --lavdf ../assets/astra_cache --out ../results/figures/counterfactual.pdf      # Fig. 2
 ```
+
+Paired differences between the full and audio-only models are reported as audio-only minus full.
 
 ## Protocol notes
 
 - **Threshold.** The decision threshold is fixed at τ = 0.5 for every experiment and is never tuned. FakeAVCeleb, DeepfakeTIMIT and VidTIMIT are evaluated strictly zero-shot.
 - **DeepfakeTIMIT.** Each fake keeps the audio of its genuine VidTIMIT original. `--shared-audio` gives both the byte-identical 16 kHz recording, so any real/fake separation must come from the video. Without it, the different decoding paths leak (audio-only AUC 0.59 instead of 0.50).
+- **Mouth crops.** The padded lip box is resized with its aspect ratio kept onto a black square canvas (letterboxing). At the model's 96-pixel input the mouth fills a band of about 96 × 35 pixels (`measure_mouth_band.py`).
 - **LAV-DF "video-only" fakes.** Their real audio is spliced and re-timed at the manipulated word: it matches the source video before the word, and after it continues delayed by a median of 100 ms (`analyse_lavdf_audio.py`). This is why an audio-only model detects them.
 
 ## Licence

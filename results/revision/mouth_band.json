@@ -1,0 +1,16 @@
+{
+  "roi": 96,
+  "black_threshold": 20,
+  "astra_cache": {
+    "n_frames": 178767,
+    "band_height_median_px": 34.5,
+    "band_height_p10_px": 24.75,
+    "band_height_p90_px": 48.0
+  },
+  "favc_cache": {
+    "n_frames": 359553,
+    "band_height_median_px": 35.25,
+    "band_height_p10_px": 26.25,
+    "band_height_p90_px": 48.0
+  }
+}
