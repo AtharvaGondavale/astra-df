@@ -2,9 +2,11 @@
 
 Code, trained models and per-clip results for:
 
-> A. Gondavale, A. Gawali, A. Gupta, A. Indulkar, P. Mishra, S. Okuhara,
+> A. Gawali, A. Gupta, A. Indulkar, A. Gondavale, P. Mishra, S. Okuhara,
 > **"Is Your Multimodal Deepfake Detector Actually Multimodal? A Modality Ablation Study,"**
-> IEICE Transactions on Information and Systems, Special Section on KICSS 2026 (under revision).
+> IEICE Transactions on Information and Systems, Special Section on KICSS 2026 (accepted, to appear).
+
+All authors contributed equally to this work.
 
 ASTRA-DF is a compact (7.11 M-parameter) audio–visual deepfake detector. It uses:
 - a mouth-region MobileNetV3 encoder and an MFCC 1-D CNN encoder;
